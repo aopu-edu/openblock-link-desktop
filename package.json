@@ -15,7 +15,7 @@
     "fetch:firmwares": "rimraf ./firmwares && node ./node_modules/openblock-link/script/download-firmwares.js",
     "fetch:tools": "rimraf ./tools && node ./node_modules/openblock-link/script/download-tools.js",
     "fetch:all": "npm run fetch:drivers && npm run fetch:exts && npm run fetch:firmwares && npm run fetch:tools",
-    "fetch:all32": "npm run fetch:drivers && npm run fetch:exts && npm run fetch:firmwares && npm run fetch:tools -- --arch=ia32",
+    "fetch:all32": "npm run fetch:drivers && npm run fetch:firmwares && npm run fetch:tools -- --arch=ia32",
     "start": "electron .",
     "build": "electron-builder",
     "build:pack": "electron-builder --dir",
