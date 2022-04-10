@@ -4,7 +4,7 @@ directories:
 extraResources: ["tools", "external-resources", 'firmwares', "statics", "drivers"]
 
 appId: 'openblock.cc.openblock-link'
-productName: "OpenBlock Link"
+productName: "QDPRobotLink"
 publish: # empty provider list = don't publish
 
 mac:
@@ -14,12 +14,12 @@ mac:
   hardenedRuntime: true
   icon: buildResources/OpenBlock-Link.icns
   provisioningProfile: embedded.provisionprofile
-  artifactName: "OpenBlock Link ${version}.${ext}"
+  artifactName: "QDPRobotLink ${version}.${ext}"
   target:
     - dmg
     # - mas
 dmg:
-  title: "OpenBlock Link ${version}"
+  title: "QDPRobotLink ${version}"
 # mas:
 #   category: public.app-category.education
 #   entitlements: buildResources/entitlements.mas.plist
@@ -42,4 +42,4 @@ nsis:
   allowToChangeInstallationDirectory: true
   include: buildResources/installer.nsh
 #   license: LICENSE
-  artifactName: "OpenBlock Link ${version} Setup.${ext}"
+  artifactName: "QDPRobotLink ${version} Setup.${ext}"
