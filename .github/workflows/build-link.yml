@@ -1,0 +1,160 @@
+name: Build link
+
+on:
+  push:
+    branches: [ qdp ]
+    tags:
+      - 'v*'
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGE.md'
+      - 'doc/*'
+      - '.github/*'
+
+jobs:
+  build-windows-link:
+    runs-on: windows-latest
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: link Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-link
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-link
+      - run: |
+          cd openblock-link
+          npm ci
+          npm link
+
+      - name: resource Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-resource
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-resource
+      - run: |
+          cd openblock-resource
+          npm ci
+          npm link
+
+      - name: l10n Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-l10n
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-l10n  
+      - run: |
+          cd openblock-l10n
+          npm ci
+          npm run build
+          npm link --force
+
+      - name: link desktop Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-link-desktop
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-link-desktop  
+      - run: |
+          cd openblock-link-desktop
+          npm install
+          npm link openblock-l10n openblock-link openblock-resource
+   
+      - name: Build Dist
+        env:
+          GA_ID: ${{ secrets.GA_ID }}
+          NODE_ENV: production
+          NODE_OPTIONS: --max_old_space_size=4096
+        run: |
+          cd openblock-link-desktop
+          npm run dist
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: QDPRobotLink.exe
+          path: openblock-desktop/dist/QDPRobotLink*.exe
+          retention-days: 2
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: link Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-link
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-link
+      - run: |
+          cd openblock-link
+          npm i
+          npm link
+
+      - name: resource Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-resource
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-resource
+      - run: |
+          cd openblock-resource
+          npm i
+          npm link
+
+      - name: l10n Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-l10n
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-l10n  
+      - run: |
+          cd openblock-l10n
+          npm i
+          npm run build
+          npm link --force
+     
+      - name: link desktop Install
+        uses: actions/checkout@v2
+        with: 
+          repository: aopu-edu/openblock-link-desktop
+          ref: refs/heads/qdp
+          token: ${{ secrets.GH_PAT }}
+          path: openblock-link-desktop  
+      - run: |
+          cd openblock-link-desktop
+          npm install
+          npm link openblock-l10n openblock-link openblock-resource
+
+      - name: Build Dist
+        env:
+          GA_ID: ${{ secrets.GA_ID }}
+          NODE_ENV: production
+          NODE_OPTIONS: --max_old_space_size=8192
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: |
+          cd openblock-link-desktop
+          npm run dist
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: QDPRobotLink.dmg
+          path: openblock-desktop/dist/QDPRobotLink*.dmg
+          retention-days: 2
