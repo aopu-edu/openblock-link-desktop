@@ -82,10 +82,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: QDPRobotLink.exe
-          path: openblock-desktop/dist/QDPRobotLink*.exe
+          path: openblock-link-desktop/dist/QDPRobotLink*.exe
           retention-days: 2
 
-  build-mac:
+  build-mac-link:
     runs-on: macos-latest
     steps:
       - name: Use Node.js
@@ -156,5 +156,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: QDPRobotLink.dmg
-          path: openblock-desktop/dist/QDPRobotLink*.dmg
+          path: openblock-link-desktop/dist/QDPRobotLink*.dmg
           retention-days: 2
